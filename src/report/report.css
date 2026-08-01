@@ -1,0 +1,208 @@
+/*
+ * Weekly report styles. Loaded as a raw string so the exact same CSS drives the
+ * in-app preview and the standalone HTML file opened for printing — colours are
+ * spelled out instead of referencing app tokens to keep the export self-contained.
+ */
+
+.rp-shell {
+  background: #f6eee2;
+  min-height: 100vh;
+  padding: 48px 24px 64px;
+  display: flex;
+  justify-content: center;
+  font-family: 'Manrope', system-ui, sans-serif;
+  color: #3b2e22;
+}
+
+.rp-sheet {
+  width: 8.5in;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+  padding: 0.6in;
+  border: 1px solid #e9dcc9;
+}
+
+.rp-header {
+  border-bottom: 2px solid #c1613c;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+}
+
+.rp-header__title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 24pt;
+  font-weight: 600;
+}
+
+.rp-header__meta {
+  font-size: 11pt;
+  color: #6b5847;
+  margin-top: 4px;
+}
+
+.rp-day {
+  margin-bottom: 22px;
+}
+
+.rp-day__title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 15pt;
+  font-weight: 600;
+  border-bottom: 1px solid #e9dcc9;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.rp-empty {
+  font-size: 10.5pt;
+  color: #a08a72;
+}
+
+.rp-label {
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  color: #b08a4c;
+  margin-bottom: 5px;
+}
+
+.rp-section {
+  margin-bottom: 12px;
+  break-inside: avoid;
+}
+
+.rp-section--last {
+  margin-bottom: 0;
+}
+
+.rp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10pt;
+}
+
+.rp-table th {
+  text-align: left;
+  padding: 4px 8px;
+  border-bottom: 1px solid #e9dcc9;
+  font-weight: 700;
+}
+
+.rp-table th.rp-table__mark,
+.rp-table td.rp-table__mark {
+  width: 60px;
+  text-align: center;
+}
+
+.rp-table td {
+  padding: 3px 8px;
+  border-bottom: 1px solid #f3eadb;
+}
+
+.rp-table td.rp-table__mark {
+  font-weight: 700;
+  color: #c9b99f;
+}
+
+.rp-table td.rp-table__mark--on {
+  color: #8a4a34;
+}
+
+.rp-entry {
+  break-inside: avoid;
+  border: 1px solid #e9dcc9;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  font-size: 10.5pt;
+}
+
+.rp-entry > div {
+  margin-bottom: 5px;
+}
+
+.rp-entry > div:last-child {
+  margin-bottom: 0;
+}
+
+.rp-entry__key {
+  font-weight: 700;
+  color: #8a4a34;
+}
+
+.rp-care {
+  font-size: 10.5pt;
+  padding: 2px 0;
+}
+
+.rp-care__time {
+  font-weight: 700;
+  color: #8a4a34;
+}
+
+/* Floating controls: in-app they sit over the sheet, in the exported file they
+   disappear the moment the print dialog opens. */
+.rp-toolbar {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 50;
+  display: flex;
+  gap: 10px;
+}
+
+.rp-toolbar__button {
+  font-family: 'Manrope', system-ui, sans-serif;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.rp-toolbar__button--secondary {
+  background: #fffcf6;
+  border: 1px solid #e0cfb6;
+  color: #6b5847;
+  padding: 10px 16px;
+}
+
+.rp-toolbar__button--secondary:hover {
+  background: #f3e6d3;
+}
+
+.rp-toolbar__button--primary {
+  background: #c1613c;
+  color: #fff8f0;
+}
+
+.rp-toolbar__button--primary:hover {
+  background: #a94f2e;
+}
+
+@page {
+  margin: 0.6in;
+}
+
+@media print {
+  .rp-no-print {
+    display: none !important;
+  }
+
+  .rp-shell {
+    display: block;
+    background: #ffffff;
+    min-height: 0;
+    padding: 0;
+  }
+
+  .rp-sheet {
+    width: auto;
+    max-width: none;
+    padding: 0;
+    border: none;
+  }
+}

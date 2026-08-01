@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Permissions for the diary window. Files and the report are handled by Rust commands, so the WebView needs no filesystem or shell access of its own. Closing is intercepted to flush pending saves, which needs explicit permission to destroy the window afterwards.",
+  "windows": ["main"],
+  "permissions": ["core:default", "core:window:allow-destroy"]
+}

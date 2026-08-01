@@ -1,0 +1,57 @@
+/* Design tokens from the handoff. Warm cream-and-terracotta palette, borders only, no shadows. */
+:root {
+  --bg-page: #f6eee2;
+  --bg-card: #fffcf6;
+  --bg-panel: #fbf5ea;
+  --bg-item: #fffaf1;
+  --bg-input: #fffdf8;
+  --bg-day: #fff8ed;
+  --bg-day-hover: #f3e6d3;
+
+  --text: #3b2e22;
+  --text-secondary: #6b5847;
+  --text-muted: #8a7561;
+  --text-faint: #a08a72;
+  --text-off: #c9b99f;
+
+  --accent: #c1613c;
+  --accent-hover: #a94f2e;
+  --on-accent: #fff8f0;
+  --accent-light: #d9a184;
+  --dot-selected: #ffd9c2;
+
+  --border-card: #e9dcc9;
+  --border-panel: #e4d4be;
+  --border-input: #e0cfb6;
+  --border-item: #eadcc6;
+  --border-checkbox: #cbb593;
+  --border-row: #f3eadb;
+
+  --daypart-day-bg: #fbf3e2;
+  --daypart-day-border: #efdfc2;
+  --daypart-day-text: #9a6b1f;
+  --daypart-day-progress: #b08a4c;
+
+  --daypart-eve-bg: #f1e4dc;
+  --daypart-eve-border: #e3cdbf;
+  --daypart-eve-text: #8a4a34;
+  --daypart-eve-progress: #a9705a;
+
+  --chip-bg: #f3e0d4;
+  --chip-text: #8a4a34;
+  --label: #b08a4c;
+  --icon-remove: #c0a98c;
+
+  --link: #b85c38;
+  --link-hover: #96431f;
+
+  --radius-card: 16px;
+  --radius-panel: 12px;
+  --radius-cta: 10px;
+  --radius-input: 8px;
+  --radius-checkbox: 6px;
+  --radius-pill: 999px;
+
+  --font-body: 'Manrope', system-ui, sans-serif;
+  --font-heading: 'Lora', Georgia, serif;
+}
