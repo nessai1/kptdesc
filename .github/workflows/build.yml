@@ -54,8 +54,14 @@ jobs:
       - name: Тесты Rust
         run: cargo test --manifest-path src-tauri/Cargo.toml
 
-      - name: Сборка приложения и установщиков
-        run: npm run tauri build -- --target x86_64-pc-windows-msvc
+      - name: Сборка приложения и установщика NSIS
+        run: npm run tauri build -- --target x86_64-pc-windows-msvc --bundles nsis
+
+      # MSI собирается отдельно и не обязателен: WiX капризен к именам файлов,
+      # а NSIS-установщик уже покрывает обычную установку.
+      - name: Сборка MSI
+        continue-on-error: true
+        run: npm run tauri build -- --target x86_64-pc-windows-msvc --bundles msi
 
       - name: Список собранных файлов
         shell: bash
@@ -63,14 +69,19 @@ jobs:
           find src-tauri/target/x86_64-pc-windows-msvc/release/bundle -type f | sort
           ls -la src-tauri/target/x86_64-pc-windows-msvc/release/*.exe
 
-      - name: Установщики
+      - name: Установщик NSIS
         uses: actions/upload-artifact@v4
         with:
-          name: kpt-diary-windows-installers
-          path: |
-            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
-            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/*-setup.exe
+          name: kpt-diary-windows-installer
+          path: src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/*-setup.exe
           if-no-files-found: error
+
+      - name: Установщик MSI
+        uses: actions/upload-artifact@v4
+        with:
+          name: kpt-diary-windows-msi
+          path: src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
+          if-no-files-found: warn
 
       - name: Портативная версия
         uses: actions/upload-artifact@v4

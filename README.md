@@ -20,6 +20,28 @@ npm test               # тесты фронтенда
 cargo test --manifest-path src-tauri/Cargo.toml   # тесты Rust
 ```
 
+## Сборка под Windows
+
+Локальная кросс-сборка с macOS требует MSVC-тулчейна, поэтому Windows-версия собирается в GitHub Actions: workflow `.github/workflows/build.yml` запускается на каждый push в `master` и вручную (`gh workflow run build.yml`).
+
+Сборка выполняется на `windows-latest` и публикует артефакты:
+
+- `kpt-diary-windows-installer` — установщик NSIS (`*-setup.exe`);
+- `kpt-diary-windows-msi` — установщик `.msi` (собирается дополнительно, не блокирует сборку);
+- `kpt-diary-windows-portable` — портативный `.exe`, запускается без установки.
+
+Скачать последнюю сборку:
+
+```bash
+gh run download --name kpt-diary-windows-installer
+```
+
+Для Windows имя продукта переопределено на ASCII (`KPT Diary`) в `src-tauri/tauri.windows.conf.json`: WiX не собирает MSI с кириллицей в имени файла. Заголовок окна и весь интерфейс остаются на русском, папка данных не меняется — она привязана к идентификатору приложения.
+
+Приложение не подписано сертификатом Windows, поэтому при первом запуске SmartScreen покажет предупреждение: «Подробнее» → «Выполнить в любом случае». Для работы нужен WebView2 Runtime — он встроен в Windows 11 и в актуальные сборки Windows 10, установщик NSIS при необходимости доустановит его сам.
+
+Данные на Windows хранятся в `%APPDATA%\com.kptdesc.diary`.
+
 ## Хранение данных
 
 Данные лежат в папке приложения (`~/Library/Application Support/com.kptdesc.diary` на macOS):
