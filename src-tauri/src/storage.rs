@@ -52,11 +52,30 @@ pub fn write_json<T: Serialize>(dir: &Path, name: &str, value: &T) -> Result<()>
     let body = serde_json::to_vec_pretty(value).map_err(Error::Encode)?;
     write_and_sync(&tmp, &body)?;
 
-    if let Err(e) = fs::rename(&tmp, &path) {
+    if let Err(e) = replace(&tmp, &path) {
         let _ = fs::remove_file(&tmp);
         return Err(e.into());
     }
     Ok(())
+}
+
+/// On Windows an antivirus scanner or the search indexer can hold the destination open for
+/// a few milliseconds right after it was written, and the rename then fails with a sharing
+/// violation. Retrying briefly turns that into a non-event; elsewhere the first try is it.
+fn replace(tmp: &Path, path: &Path) -> std::io::Result<()> {
+    const ATTEMPTS: u32 = if cfg!(windows) { 5 } else { 1 };
+
+    let mut attempt = 0;
+    loop {
+        attempt += 1;
+        match fs::rename(tmp, path) {
+            Ok(()) => return Ok(()),
+            Err(_) if attempt < ATTEMPTS => {
+                std::thread::sleep(std::time::Duration::from_millis(20 * u64::from(attempt)));
+            }
+            Err(e) => return Err(e),
+        }
+    }
 }
 
 fn write_and_sync(path: &Path, body: &[u8]) -> Result<()> {

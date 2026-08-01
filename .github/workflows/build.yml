@@ -1,0 +1,80 @@
+name: build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Проверки фронтенда
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Типы
+        run: npx tsc --noEmit
+
+      - name: Тесты
+        run: npm test
+
+  windows:
+    name: Сборка под Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - run: npm ci
+
+      - name: Тесты Rust
+        run: cargo test --manifest-path src-tauri/Cargo.toml
+
+      - name: Сборка приложения и установщиков
+        run: npm run tauri build -- --target x86_64-pc-windows-msvc
+
+      - name: Список собранных файлов
+        shell: bash
+        run: |
+          find src-tauri/target/x86_64-pc-windows-msvc/release/bundle -type f | sort
+          ls -la src-tauri/target/x86_64-pc-windows-msvc/release/*.exe
+
+      - name: Установщики
+        uses: actions/upload-artifact@v4
+        with:
+          name: kpt-diary-windows-installers
+          path: |
+            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
+            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/*-setup.exe
+          if-no-files-found: error
+
+      - name: Портативная версия
+        uses: actions/upload-artifact@v4
+        with:
+          name: kpt-diary-windows-portable
+          path: src-tauri/target/x86_64-pc-windows-msvc/release/*.exe
+          if-no-files-found: error
